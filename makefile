@@ -7,10 +7,11 @@ FILE=
 	$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-    Doodle.java \
-    DrawingCanvas.java
+    DoodleView.java \
+    DrawingCanvas.java \
+	DrawingSelector.java
 
-MAIN = Doodle
+MAIN = DoodleView
 
 default: classes
 
