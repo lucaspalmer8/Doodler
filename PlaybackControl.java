@@ -8,7 +8,6 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 
  	public PlaybackControl(Model model) {
        	m_model = model;
-		setResizable(false);
        	setMaximumSize(new Dimension(400, 100));
 		setMinimumSize(new Dimension(400, 100));
        	setPreferredSize(new Dimension(400, 100));
