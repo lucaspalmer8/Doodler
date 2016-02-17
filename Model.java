@@ -6,16 +6,23 @@ import java.util.ArrayList;
 public class Model {
 
 	private Color m_drawingColor;
-	private int m_width;
-	private View m_view;
+	private int m_drawingWidth;
+	private ArrayList<ViewInterface> m_views = new ArrayList<ViewInterface>();
+	private ArrayList<Stroke> m_strokeList = new ArrayList<Stroke>();
 
 	public Model() {
 		m_drawingColor = Color.BLACK;
-		m_width = 10;
+		m_drawingWidth = 10;
 	}
 
-	public void setView(View view) {
-		m_view = view;
+	public void addObserver(ViewInterface view) {
+		m_views.add(view);
+	}
+
+	public void notifyViews() {
+		for (ViewInterface view : m_views) {
+			view.notifyView();
+		}
 	}
 
 	public Color getColor() {
@@ -23,7 +30,7 @@ public class Model {
 	}
 
 	public int getWidth() {
-		return m_width;
+		return m_drawingWidth;
 	}
 
 	public void setColor(Color color) {
@@ -31,7 +38,7 @@ public class Model {
 	}
 
 	public void setWidth(int width) {
-		m_width = width;
+		m_drawingWidth = width;
 	}
 
 	public void newStroke(MouseEvent e) {
@@ -46,8 +53,6 @@ public class Model {
 	public ArrayList<Stroke> getStrokeList() {
 		return m_strokeList;
 	}
-
-	private ArrayList<Stroke> m_strokeList = new ArrayList<Stroke>();
 
     private class Point {
         private int m_x;
@@ -69,11 +74,12 @@ public class Model {
     public class Stroke {
         private ArrayList<Point> m_pointList = new ArrayList<Point>();
         private Color m_color;
+		private int m_width;
 
         public Stroke(Point point) {
             m_pointList.add(point);
             m_color = m_drawingColor;
-            //System.out.println("Settttttttttttttttttttttttttttttttttttttttttttttttting the color to:::::: " + m_color);
+			m_width = m_drawingWidth;
         }
 
         public void addPoint(Point point) {
@@ -81,9 +87,8 @@ public class Model {
         }
 		public void draw(Graphics2D g2) {
             for (int i = 0; i < m_pointList.size(); i++) {
-            g2.setStroke(new BasicStroke(10, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            g2.setStroke(new BasicStroke(m_width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             g2.setColor(m_color);
-            //System.out.println("Drawingttttttttttttttttttttttttttttttttttttttttttttttttt the color to:   " + m_color);
             if (i == m_pointList.size() - 1) {
                 g2.drawLine(m_pointList.get(i).getX(), m_pointList.get(i).getY(),
                         m_pointList.get(i).getX(), m_pointList.get(i).getY());

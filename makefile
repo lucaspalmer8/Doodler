@@ -9,7 +9,9 @@ FILE=
 CLASSES = \
 	Doodle.java \
 	Model.java \
-    View.java
+    ViewInterface.java \
+	DrawingCanvas.java \
+	DrawingSelector.java
 
 MAIN = Doodle
 
