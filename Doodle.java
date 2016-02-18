@@ -31,31 +31,50 @@ public class Doodle {
 		//Notify the views that they are connected to the model.
 		model.notifyViews();
 
-		JPanel m_panel1 = new JPanel();
-		JPanel m_panel2 = new JPanel();
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+
+		drawingCanvas.setBorder(BorderFactory.createLineBorder(Color.black, 5));
+		drawingSelector.setBorder(BorderFactory.createLineBorder(Color.black, 5));
+//		playbackControl.setBorder(BorderFactory.createLineBorder(Color.black, 5));
+
+		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		JMenu viewMenu = new JMenu("View");
+		menuBar.add(fileMenu);
+		menuBar.add(viewMenu);
+		
+		panel.add(menuBar, BorderLayout.NORTH);
+		panel.add(drawingSelector, BorderLayout.WEST);
+		panel.add(drawingCanvas, BorderLayout.CENTER);
+		panel.add(playbackControl, BorderLayout.SOUTH);
+
+
+//		JPanel m_panel1 = new JPanel();
+//		JPanel m_panel2 = new JPanel();
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setSize(900, 600);
         frame.setMinimumSize(new Dimension(200, 300));
-        m_panel2.setLayout(new BoxLayout(m_panel2, BoxLayout.X_AXIS));
-        m_panel1.setLayout(new BoxLayout(m_panel1, BoxLayout.Y_AXIS));
-        m_panel1.add(m_panel2);
-        m_panel1.add(playbackControl);//new JButton( "Panel One" ));//, BorderLayout.NORTH );
+  //      m_panel2.setLayout(new BoxLayout(m_panel2, BoxLayout.X_AXIS));
+    //    m_panel1.setLayout(new BoxLayout(m_panel1, BoxLayout.Y_AXIS));
+      //  m_panel1.add(m_panel2);
+        //m_panel1.add(playbackControl);//new JButton( "Panel One" ));//, BorderLayout.NORTH );
         //m_panel1.add( new JButton( "One" ));//, BorderLayout.NORTH );
-        m_panel2.add(drawingSelector);
-        m_panel2.setBackground(Color.LIGHT_GRAY);
+        //m_panel2.add(drawingSelector);
+        //m_panel2.setBackground(Color.LIGHT_GRAY);
 //      m_panel2.add( new JColorChooser());//, BorderLayout.NORTH );
 
-        drawingCanvas.setMinimumSize(new Dimension(400, 300));
-        m_panel2.add(drawingCanvas);
+        //drawingCanvas.setMinimumSize(new Dimension(400, 300));
+        //m_panel2.add(drawingCanvas);
 
-        m_panel1.setBorder(BorderFactory.createLineBorder(Color.black));
-        m_panel2.setBorder(BorderFactory.createLineBorder(Color.black));
+        //m_panel1.setBorder(BorderFactory.createLineBorder(Color.black));
+        //m_panel2.setBorder(BorderFactory.createLineBorder(Color.black));*/
         /*m_panel1.add(m_homeScreen);
         m_panel1.add( new JButton( "One" ), BorderLayout.NORTH );
         *///m_panel1.add( new JButton( "Two" ), BorderLayout.CENTER );
-        frame.add(m_panel1);
+        frame.add(panel);
         frame.setVisible(true);
     }
 }

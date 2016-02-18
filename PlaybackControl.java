@@ -6,12 +6,42 @@ import java.util.ArrayList;
 public class PlaybackControl extends JPanel implements ViewInterface {
    	private Model m_model;
 
+	/*private class ColorsItem extends JPanel {
+		private Color m_color;
+	ColorsItem(Color color) {
+            m_color = color;
+            setOpaque(true);
+            setBackground(color);
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    m_model.setColor(m_color);
+                }
+            });
+        }
+	}*/
+	
+	private class Slider extends JSlider {
+
+		public Slider() {
+			setPaintTicks(true);
+			setPaintLabels(true);
+			setMajorTickSpacing(1);
+			setMaximum(5);
+			setMinimum(0);
+		}
+
+	}
+
  	public PlaybackControl(Model model) {
        	m_model = model;
        	setMaximumSize(new Dimension(400, 100));
 		setMinimumSize(new Dimension(400, 100));
        	setPreferredSize(new Dimension(400, 100));
-       	setLayout(new GridLayout(9, 2));
+       	setLayout(new BorderLayout());
+		add(new JButton("Back"), BorderLayout.WEST);
+		add(new JButton("Forward"), BorderLayout.EAST);
+		add(new Slider(), BorderLayout.CENTER);
    	}
 
 	@Override
