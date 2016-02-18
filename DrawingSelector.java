@@ -49,6 +49,7 @@ public class DrawingSelector extends JPanel implements ViewInterface {
 	}
 
    	private Model m_model;
+	private JColorChooser m_chooser = new JColorChooser();
 
 	private class TwoColors extends JPanel {
 		public TwoColors(Color color1, Color color2) {
@@ -76,7 +77,21 @@ public class DrawingSelector extends JPanel implements ViewInterface {
 		custom.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("EhhhhhhhhhhhH");
+				//System.out.println("EhhhhhhhhhhhH");
+				//JColorChooser chooser = new JColorChooser();
+				//Color newColor = JColorChooser.showDialog(DrawingSelector.this, "Custom Color Selector", m_model.getColor());
+				//if (newColor != null) {
+				//	m_model.setColor(newColor);
+				//}
+				ActionListener actionListener = new ActionListener() {
+					@Override
+      				public void actionPerformed(ActionEvent actionEvent) {
+						m_model.setColor(m_chooser.getColor());
+					}
+				};
+				m_chooser.setColor(m_model.getColor());
+				JDialog dialog = JColorChooser.createDialog(DrawingSelector.this, "Custom Color Chooser", false, m_chooser, actionListener, null);
+				dialog.setVisible(true);
 			}
 		});
 		add(custom);			

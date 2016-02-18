@@ -36,17 +36,38 @@ public class Doodle {
 
 		drawingCanvas.setBorder(BorderFactory.createLineBorder(Color.black, 5));
 		drawingSelector.setBorder(BorderFactory.createLineBorder(Color.black, 5));
-//		playbackControl.setBorder(BorderFactory.createLineBorder(Color.black, 5));
+		playbackControl.setBorder(BorderFactory.createLineBorder(Color.black, 5));
 
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		JMenu viewMenu = new JMenu("View");
 		menuBar.add(fileMenu);
 		menuBar.add(viewMenu);
+
+		drawingCanvas.setPreferredSize(new Dimension(700, 400));
+		drawingCanvas.setMaximumSize(new Dimension(700, 400));
+		drawingCanvas.setMinimumSize(new Dimension(700, 400));
+
+		///Here it iss!!!!!
+		JPanel panel1 = new JPanel();
+		panel1.setLayout(new BoxLayout(panel1, BoxLayout.X_AXIS));
+		JPanel panel2 = new JPanel();
+		panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+
+		panel2.add(new JPanel());
+		panel2.add(new JScrollPane(drawingCanvas));
+		panel2.add(new JPanel());
+		panel1.add(new JPanel());
+		panel1.add(panel2);
+		panel1.add(new JPanel());
+//(new BoxLayout(m_panel2, BoxLayout.X_AXIS));
+    //    m_panel1.setLayout(new BoxLayout(m_panel1, BoxLayout.Y_AXIS));
+
+
 		
 		panel.add(menuBar, BorderLayout.NORTH);
 		panel.add(drawingSelector, BorderLayout.WEST);
-		panel.add(drawingCanvas, BorderLayout.CENTER);
+		panel.add(/*new JScrollPane(drawingCanvas)*/panel1, BorderLayout.CENTER);
 		panel.add(playbackControl, BorderLayout.SOUTH);
 
 

@@ -9,7 +9,7 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
 
    	public DrawingCanvas(Model model) {
 //		setMaximumSize(new Dimension(400, 400));
-		//setBackground(Color.RED);
+		setBackground(Color.WHITE);
         m_model = model;
         addMouseListener(new MouseAdapter() {
            	@Override
@@ -17,6 +17,10 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
                	m_model.newStroke(e);
                	repaint();
            	}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				System.out.println("EHHHHHHHHH");
+			}
         });
 
        	addMouseMotionListener(new MouseMotionAdapter() {

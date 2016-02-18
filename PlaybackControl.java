@@ -27,7 +27,11 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 			setPaintTicks(true);
 			setPaintLabels(true);
 			setMajorTickSpacing(1);
-			setMaximum(5);
+			//setMinorTickSpacing(1);
+			//setSnapToTicks(false);
+			//if (getSnapToTicks()) System.out.println("AHHHHHHHHHHHHHHHHHHHH");
+			//setValue(3.5);
+			setMaximum(0);
 			setMinimum(0);
 		}
 
