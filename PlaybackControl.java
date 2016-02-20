@@ -72,7 +72,7 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 		startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                m_slider.setValue(m_slider.getValue() - 1);//m_slider.getMinimum());
+                m_slider.setValue(m_slider.getMinimum());//m_slider.getMinimum());
             }
         });
 
@@ -86,30 +86,9 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 
 		JButton playButton = new JButton("Play");
         playButton.addActionListener(new ActionListener() {
-			public void sleep() {
-				try {
-                        Thread.sleep(1000);                 //1000 milliseconds is one second.
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-			}
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 m_slider.setValue(m_slider.getMinimum());
-				//sleep();
-				//m_slider.setValue(5);
-				//sleep();
-				//m_slider.setValue(10);
-				//m_slider.setValue(m_slider.getMaximum()/2);
-				/*Timer t = new Timer();
-				t.schedule(new TimerTask() {
-    				@Override
-    				public void run() {
-       					System.out.println("Hello World");
-						m_slider.setValue(m_slider.getValue() + 1);
-    				}
-				}, 0, 10);*/
 				final Timer timer = new Timer(10, new ActionListener() {
     				public void actionPerformed(ActionEvent evt) {
 						System.out.println("In timeer");
@@ -120,17 +99,27 @@ public class PlaybackControl extends JPanel implements ViewInterface {
     				}
 				});
 				timer.start();
-
-
-				/*for(int i = 1; i <= m_slider.getMaximum(); i++) {
-					System.out.println("Setting the value to:::  " + i);
-					//m_slider.m_code = true;
-					m_slider.setValue(i);
-					//Thread.wait(100);
-					//m_slider.m_code = false;
-				}*/
             }
         });
+
+		JButton reverseButton = new JButton("Reverse");
+        reverseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                m_slider.setValue(m_slider.getMaximum());
+                final Timer timer = new Timer(10, new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        System.out.println("In timeer");
+                        m_slider.setValue(m_slider.getValue() - 1);
+                        if (m_slider.getValue() == m_slider.getMinimum()) {
+                            ((Timer)evt.getSource()).stop();
+                        }
+                    }
+                });
+                timer.start();
+            }
+        });
+
 
 		JPanel panel1 = new JPanel();
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.X_AXIS));
@@ -140,6 +129,7 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new BoxLayout(panel2, BoxLayout.X_AXIS));
 		panel2.add(playButton);
+		panel2.add(reverseButton);
 
 		add(panel2, BorderLayout.WEST);
 		add(panel1, BorderLayout.EAST);
