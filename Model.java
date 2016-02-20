@@ -125,19 +125,13 @@ public class Model {
         private Color m_color;
 		private int m_width;
 		private boolean m_finished;
-		private long m_timeCreated;
 
         public Stroke(Point point) {
             m_pointList.add(point);
             m_color = m_drawingColor;
 			m_width = m_drawingWidth;
 			m_finished = false;
-			m_timeCreated = System.currentTimeMillis();
         }
-
-		public long getTimeCreated() {
-			return m_timeCreated;
-		}
 
 		public void finished() {
 			m_finished = true;
@@ -152,10 +146,29 @@ public class Model {
         }
 
 		public void draw(Graphics2D g2, int index) {
-			if (isFinished() && index >= m_sliderNumber/100) {
+			if (isFinished() && index >= m_sliderNumber/100 + 1) {
 				return;
 			}
+
+			Point last = m_pointList.get(m_pointList.size() - 1);
+			Point first = m_pointList.get(0);
+			float totalTime = last.getTimeStamp() - first.getTimeStamp();
+			System.out.println(":::::::total time::::::::::  " + totalTime);
+			float sliderRatio = (m_sliderNumber % 100)/100f;
+			boolean drawEntireStroke = index <= m_sliderNumber/100 - 1;
+//			System.out.println("::::::::::::::::::::::  " + ratio);
             for (int i = 0; i < m_pointList.size(); i++) {
+				Point point = m_pointList.get(i);
+				//if (totalTime == 0) {int k = 100/0;}
+				float drawingRatio;
+				if (totalTime == 0) {
+					drawingRatio = 1;
+				} else {
+					drawingRatio = (point.getTimeStamp() - first.getTimeStamp())/totalTime;
+				}
+				if (!drawEntireStroke && isFinished() && drawingRatio >= sliderRatio) break;
+				System.out.println("draw strok:  " + drawEntireStroke + "  isFinished::  " + isFinished() + "  drawing Ratio:   " +drawingRatio+ "   slider ratio:   " + sliderRatio);
+				//System.out.println(":::::::::::::::::::::::::   " + drawingRatio);
             	g2.setStroke(new BasicStroke(m_width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             	g2.setColor(m_color);
             	if (i == m_pointList.size() - 1) {
