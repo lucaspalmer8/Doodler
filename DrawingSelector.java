@@ -90,7 +90,7 @@ public class DrawingSelector extends JPanel implements ViewInterface {
 					}
 				};
 				m_chooser.setColor(m_model.getColor());
-				JDialog dialog = JColorChooser.createDialog(DrawingSelector.this, "Custom Color Chooser", false, m_chooser, actionListener, null);
+				JDialog dialog = JColorChooser.createDialog(m_model.getFrame(), "Custom Color Chooser", false, m_chooser, actionListener, null);
 				dialog.setVisible(true);
 			}
 		});

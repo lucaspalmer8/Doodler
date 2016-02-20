@@ -14,7 +14,7 @@ public class Doodle {
 		JFrame frame = new JFrame("Doodle");
 
 		//Create and initialize model.
-        Model model = new Model();
+        Model model = new Model(frame);
 
 		//Create view/controller and tell it about model.
         DrawingCanvas drawingCanvas = new DrawingCanvas(model);
@@ -26,7 +26,7 @@ public class Doodle {
 
 		//Create view/controller and tell it about model.
 		PlaybackControl playbackControl = new PlaybackControl(model);
-		model.addObserver(drawingSelector);
+		model.addObserver(playbackControl);
 
 		//Notify the views that they are connected to the model.
 		model.notifyViews();
@@ -44,9 +44,9 @@ public class Doodle {
 		menuBar.add(fileMenu);
 		menuBar.add(viewMenu);
 
-		drawingCanvas.setPreferredSize(new Dimension(700, 400));
-		drawingCanvas.setMaximumSize(new Dimension(700, 400));
-		drawingCanvas.setMinimumSize(new Dimension(700, 400));
+//		drawingCanvas.setPreferredSize(new Dimension(700, 400));
+//		drawingCanvas.setMaximumSize(new Dimension(700, 400));
+//		drawingCanvas.setMinimumSize(new Dimension(700, 400));
 
 		///Here it iss!!!!!
 		JPanel panel1 = new JPanel();
@@ -55,7 +55,7 @@ public class Doodle {
 		panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
 
 		panel2.add(new JPanel());
-		panel2.add(new JScrollPane(drawingCanvas));
+		panel2.add(drawingCanvas);
 		panel2.add(new JPanel());
 		panel1.add(new JPanel());
 		panel1.add(panel2);
@@ -67,7 +67,7 @@ public class Doodle {
 		
 		panel.add(menuBar, BorderLayout.NORTH);
 		panel.add(drawingSelector, BorderLayout.WEST);
-		panel.add(/*new JScrollPane(drawingCanvas)*/panel1, BorderLayout.CENTER);
+		panel.add(new JScrollPane(panel1), BorderLayout.CENTER);
 		panel.add(playbackControl, BorderLayout.SOUTH);
 
 
