@@ -35,6 +35,7 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
 
 	@Override
 	public void notifyView() {
+		System.out.println("Repainting canvas");
 		repaint();
 	}
 

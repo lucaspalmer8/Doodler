@@ -145,6 +145,9 @@ public class Model {
             m_pointList.add(point);
         }
 
+		//public boolean isPointValid(int index) {
+		//}
+
 		public void draw(Graphics2D g2, int index) {
 			if (isFinished() && index >= m_sliderNumber/100 + 1) {
 				return;
@@ -153,7 +156,7 @@ public class Model {
 			Point last = m_pointList.get(m_pointList.size() - 1);
 			Point first = m_pointList.get(0);
 			float totalTime = last.getTimeStamp() - first.getTimeStamp();
-			System.out.println(":::::::total time::::::::::  " + totalTime);
+//			System.out.println(":::::::total time::::::::::  " + totalTime);
 			float sliderRatio = (m_sliderNumber % 100)/100f;
 			boolean drawEntireStroke = index <= m_sliderNumber/100 - 1;
 //			System.out.println("::::::::::::::::::::::  " + ratio);
@@ -167,17 +170,17 @@ public class Model {
 					drawingRatio = (point.getTimeStamp() - first.getTimeStamp())/totalTime;
 				}
 				if (!drawEntireStroke && isFinished() && drawingRatio >= sliderRatio) break;
-				System.out.println("draw strok:  " + drawEntireStroke + "  isFinished::  " + isFinished() + "  drawing Ratio:   " +drawingRatio+ "   slider ratio:   " + sliderRatio);
+				//System.out.println("draw strok:  " + drawEntireStroke + "  isFinished::  " + isFinished() + "  drawing Ratio:   " +drawingRatio+ "   slider ratio:   " + sliderRatio);
 				//System.out.println(":::::::::::::::::::::::::   " + drawingRatio);
             	g2.setStroke(new BasicStroke(m_width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             	g2.setColor(m_color);
-            	if (i == m_pointList.size() - 1) {
+            	if (i == 0) {//m_pointList.size() - 1) {
                 	g2.drawLine(m_pointList.get(i).getX(), m_pointList.get(i).getY(),
                        	 	m_pointList.get(i).getX(), m_pointList.get(i).getY());
-                	break;
+                	continue;
             	}
-            	g2.drawLine(m_pointList.get(i).getX(), m_pointList.get(i).getY(),
-                	        m_pointList.get(i + 1).getX(), m_pointList.get(i + 1).getY());
+            	g2.drawLine(m_pointList.get(i - 1).getX(), m_pointList.get(i - 1).getY(),
+                	        m_pointList.get(i).getX(), m_pointList.get(i).getY());
             }
         }
     }
