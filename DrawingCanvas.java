@@ -9,6 +9,7 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
 
    	public DrawingCanvas(Model model) {
 //		setMaximumSize(new Dimension(400, 400));
+		setBorder(BorderFactory.createLineBorder(Color.black, 5));
 		setBackground(Color.WHITE);
         m_model = model;
         addMouseListener(new MouseAdapter() {
@@ -35,18 +36,28 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
 
 	@Override
 	public void notifyView() {
-		System.out.println("Repainting canvas");
+		System.out.println("Repainting canvas aaaaaa");
 		repaint();
+		revalidate();
 	}
 
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(700, 400);
+//		if (m_model.getFullSize()) {
+			return new Dimension(m_model.CANVAS_WIDTH, m_model.CANVAS_HEIGHT);
+	//	} else {
+	//		return super.getPreferredSize();
+	//	}
+		//return new Dimension(10000, 10000);
 	}
 
 	@Override
 	public Dimension getMaximumSize() {
-		return new Dimension(700, 400);
+	//	if (m_model.getFullSize()) {
+			return new Dimension(m_model.CANVAS_WIDTH, m_model.CANVAS_HEIGHT);
+	//	} else {
+	//		return super.getMaximumSize();//new Dimension(getParent().getWidth(), getParent().getHeight());
+	//	}
 	}
 
 	@Override    
@@ -57,7 +68,8 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
            	    RenderingHints.VALUE_ANTIALIAS_ON);
        	//for (Model.Stroke stroke : m_model.getStrokeList()) {
 		for (int i = 0; i < m_model.getStrokeList().size(); i++) {
+			System.out.println("Drawing the stroke: " + i);
            	m_model.getStrokeList().get(i).draw(g2, i);
        	}
-   	}
+  	}
 }

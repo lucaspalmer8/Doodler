@@ -9,14 +9,20 @@ public class Model {
 	private int m_drawingWidth;
 	private ArrayList<ViewInterface> m_views = new ArrayList<ViewInterface>();
 	private ArrayList<Stroke> m_strokeList = new ArrayList<Stroke>();
-	private JFrame m_frame;
 	private int m_sliderNumber;
+	private boolean m_fullSize;
 
-	public Model(JFrame frame) {
+	public static int CANVAS_WIDTH = 700;
+	public static int CANVAS_HEIGHT = 400;
+
+	private Doodle doodle;
+
+	public Model(Doodle doodler) {
 		m_drawingColor = Color.BLACK;
 		m_drawingWidth = 10;
-		m_frame = frame;
 		m_sliderNumber = 0;
+		m_fullSize = true;
+		doodle = doodler;
 	}
 
 	public void addObserver(ViewInterface view) {
@@ -27,6 +33,26 @@ public class Model {
 		for (ViewInterface view : m_views) {
 			view.notifyView();
 		}
+	}
+	
+	public void setFullSize(boolean fullSize) {
+		if (m_fullSize == fullSize) return;
+		m_fullSize = fullSize;
+		if (m_fullSize) {
+			doodle.panel.remove(doodle.fitView);
+			doodle.panel.add(doodle.fullView, BorderLayout.CENTER);
+			doodle.panel.validate();
+			doodle.panel.repaint();
+		} else {
+			doodle.panel.remove(doodle.fullView);
+			doodle.panel.add(doodle.fitView, BorderLayout.CENTER);
+			doodle.panel.validate();
+			doodle.panel.repaint();
+		}
+	}
+	
+	public boolean getFullSize() {
+		return m_fullSize;
 	}
 
 	public void setSliderNumber(int num) {
@@ -42,7 +68,7 @@ public class Model {
 	}
 
 	public JFrame getFrame() {
-		return m_frame;
+		return doodle.frame;
 	}
 
 	public Color getColor() {
