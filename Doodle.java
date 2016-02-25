@@ -34,7 +34,7 @@ public class Doodle {
         Model model = new Model(this);
 
 		//Create view/controller and tell it about model.
-        DrawingCanvas drawingCanvas = new DrawingCanvas(model) {
+        DrawingCanvas drawingCanvas = new DrawingCanvas(model, true) {
 			@Override
     		public Dimension getPreferredSize() {
             	return new Dimension(700, 400);
@@ -48,7 +48,7 @@ public class Doodle {
 		model.addObserver(drawingCanvas);
 
 		//Create view/controller and tell it about model.
-        DrawingCanvas drawingCanvas2 = new DrawingCanvas(model);
+        DrawingCanvas drawingCanvas2 = new DrawingCanvas(model, false);
         model.addObserver(drawingCanvas2);
 
 		//Create view/controller and tell it about model.

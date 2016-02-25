@@ -87,19 +87,19 @@ public class Model {
 		m_drawingWidth = width;
 	}
 
-	public void newStroke(MouseEvent e) {
+	public void newStroke(Point point) {
 		//right here, we must clean up the strokeList based on sliderNumber before adding things to it!!!!!!!!!
 		while (m_strokeList.size() > 0 && m_strokeList.size() - 1 >= m_sliderNumber/100) {
 			m_strokeList.remove(m_strokeList.size() - 1);
 		}
 
-		m_strokeList.add(new Stroke(new Point(e.getX(), e.getY(), System.currentTimeMillis())));
+		m_strokeList.add(new Stroke(point));
 		notifyViews();
 	}
 
-	public void extendStroke(MouseEvent e) {
+	public void extendStroke(Point point) {
 		Stroke current = m_strokeList.get(m_strokeList.size() - 1);
-        current.addPoint(new Point(e.getX(), e.getY(), System.currentTimeMillis()));
+        current.addPoint(point);
 		notifyViews();
 	}
 
@@ -124,26 +124,34 @@ public class Model {
 		return m_strokeList;
 	}
 
-    private class Point {
-        private int m_x;
-        private int m_y;
-		private long m_timeStamp;
+	public class Point {
+        private float m_x;
+        private float m_y;
+        private long m_timeStamp;
 
-        public Point(int x, int y, long time) {
+        public Point(float x, float y, long time) {
             m_x = x;
             m_y = y;
-			m_timeStamp = time;
+            m_timeStamp = time;
         }
 
         int getX() {
-            return m_x;
+            if (m_fullSize) {
+                return (int)m_x;
+            } else {
+                return (int)(m_x*doodle.fitView.getWidth()/Model.CANVAS_WIDTH);
+            }
         }
         int getY() {
-            return m_y;
+            if (m_fullSize) {
+                return (int)m_y;
+            } else {
+                return (int)(m_y*doodle.fitView.getHeight()/Model.CANVAS_HEIGHT);
+            }
         }
-		long getTimeStamp() {
-			return m_timeStamp;
-		}
+        long getTimeStamp() {
+            return m_timeStamp;
+        }
     }
 
     public class Stroke {

@@ -6,8 +6,9 @@ import java.util.ArrayList;
 public class DrawingCanvas extends JPanel implements ViewInterface {
 
 	private Model m_model;
+	private boolean m_fullView;
 
-   	public DrawingCanvas(Model model) {
+   	public DrawingCanvas(Model model, boolean fullView) {
 //		setMaximumSize(new Dimension(400, 400));
 		setBorder(BorderFactory.createLineBorder(Color.black, 5));
 		setBackground(Color.WHITE);
@@ -15,7 +16,10 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
         addMouseListener(new MouseAdapter() {
            	@Override
            	public void mousePressed(MouseEvent e) {
-               	m_model.newStroke(e);
+				float x = (float)e.getX()*Model.CANVAS_WIDTH/getWidth();
+				float y = (float)e.getY()*Model.CANVAS_HEIGHT/getHeight();
+				Model.Point point =  m_model.new Point(x, y, System.currentTimeMillis());
+               	m_model.newStroke(point);
 //               	repaint();
 //				System.out.println(getWidth() + "   " + getHeight());
            	}
@@ -28,7 +32,10 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
        	addMouseMotionListener(new MouseMotionAdapter() {
            	@Override
            	public void mouseDragged(MouseEvent e) {
-               	m_model.extendStroke(e);
+				float x = (float)e.getX()*Model.CANVAS_WIDTH/getWidth();
+                float y = (float)e.getY()*Model.CANVAS_HEIGHT/getHeight();
+                Model.Point point =  m_model.new Point(x, y, System.currentTimeMillis());
+               	m_model.extendStroke(point);
   //             	repaint();
            	}
        	});
