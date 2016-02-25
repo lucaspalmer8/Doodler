@@ -34,6 +34,10 @@ public class Doodle {
         Model model = new Model(this);
 
 		//Create view/controller and tell it about model.
+		MenuBar menuBar = new MenuBar(model);
+		model.addObserver(menuBar);
+
+		//Create view/controller and tell it about model.
         DrawingCanvas drawingCanvas = new DrawingCanvas(model, true) {
 			@Override
     		public Dimension getPreferredSize() {
@@ -112,7 +116,7 @@ public class Doodle {
 		//panelMain.show("FIT");
 */
 		
-		panel.add(new MenuBar(model), BorderLayout.NORTH);
+		panel.add(menuBar, BorderLayout.NORTH);
 		panel.add(drawingSelector, BorderLayout.WEST);
 		panel.add(fullView, BorderLayout.CENTER);
 		panel.add(playbackControl, BorderLayout.SOUTH);

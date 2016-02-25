@@ -34,6 +34,21 @@ public class Model {
 			view.notifyView();
 		}
 	}
+
+	//Reset everything to the default
+	public void resetDefault() {
+		m_drawingColor = Color.BLACK;
+        m_drawingWidth = 10;
+        setFullSize(true);
+		m_strokeList = new ArrayList<Stroke>();
+		notifyViews();
+	}
+
+	//Load a new doodle
+	public void resetDoodle(ArrayList<Stroke> strokes) {
+		m_strokeList = strokes;
+		notifyViews();
+	}
 	
 	public void setFullSize(boolean fullSize) {
 		if (m_fullSize == fullSize) return;
@@ -160,12 +175,31 @@ public class Model {
 		private int m_width;
 		private boolean m_finished;
 
+		//For loading old Doodle
+		public Stroke(int width, Color color) {
+			m_color = color;
+			m_width = width;
+			m_finished = true;
+		}
+
         public Stroke(Point point) {
             m_pointList.add(point);
             m_color = m_drawingColor;
 			m_width = m_drawingWidth;
 			m_finished = false;
         }
+
+		public ArrayList<Point> getPointList() {
+			return m_pointList;
+		}
+
+		public int getWidth() {
+			return m_width;
+		}
+
+		public Color getColor() {
+			return m_color;
+		}
 
 		public void finished() {
 			m_finished = true;
