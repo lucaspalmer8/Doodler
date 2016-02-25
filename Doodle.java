@@ -66,8 +66,8 @@ public class Doodle {
 		//panel.setLayout(new BorderLayout());
 
 //		drawingView.setBorder(BorderFactory.createLineBorder(Color.black, 5));
-		drawingSelector.setBorder(BorderFactory.createLineBorder(Color.black, 5));
-		playbackControl.setBorder(BorderFactory.createLineBorder(Color.black, 5));
+//		drawingSelector.setBorder(BorderFactory.createLineBorder(Color.black, 5));
+//		playbackControl.setBorder(BorderFactory.createLineBorder(Color.black, 5));
 
 		//JMenuBar menuBar = new JMenuBar();
 		//JMenu fileMenu = new JMenu("File");

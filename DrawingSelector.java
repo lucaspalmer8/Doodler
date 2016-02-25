@@ -53,7 +53,7 @@ public class DrawingSelector extends JPanel implements ViewInterface {
 
 	private class TwoColors extends JPanel {
 		public TwoColors(Color color1, Color color2) {
-			setLayout(new GridLayout(1, 2));
+			setLayout(new GridLayout(1, 2, 3, 3));
 			add(new ColorItem(color1));
 			add(new ColorItem(color2));
 		}
@@ -61,11 +61,11 @@ public class DrawingSelector extends JPanel implements ViewInterface {
 
 	public DrawingSelector(Model model) {
 		m_model = model;
-		setBackground(Color.BLACK);
+//		setBackground(Color.BLACK);
 		setOpaque(true);
         setMaximumSize(new Dimension(100, 400));
         setPreferredSize(new Dimension(100, 400));
-		setLayout(new GridLayout(13,1));
+		setLayout(new GridLayout(13,1, 3, 3));
         add(new TwoColors(Color.BLACK, Color.RED));
 		add(new TwoColors(Color.BLUE, Color.MAGENTA));
 		add(new TwoColors(Color.GREEN, Color.ORANGE));
