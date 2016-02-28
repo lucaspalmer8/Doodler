@@ -1,9 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.io.*;
+import javax.imageio.ImageIO;
 //import java.util.Timer;
 //import java.util.TimerTask;
 
@@ -67,8 +70,15 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 		setMinimumSize(new Dimension(400, 100));
        	setPreferredSize(new Dimension(400, 100));
        	setLayout(new BorderLayout());
-		
-		JButton startButton = new JButton("Start");
+	
+		BufferedImage img = null;
+		Image newimg = null;
+		try {
+    		img = ImageIO.read(new File("rewind.png"));
+		} catch (IOException e) {}
+		newimg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH); 
+	
+		JButton startButton = new JButton(new ImageIcon(newimg));
 		startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -76,7 +86,12 @@ public class PlaybackControl extends JPanel implements ViewInterface {
             }
         });
 
-		JButton endButton = new JButton("End");
+		try {
+            img = ImageIO.read(new File("fastforward.png"));
+        } catch (IOException e) {}
+        newimg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
+		JButton endButton = new JButton(new ImageIcon(newimg));
         endButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -84,7 +99,12 @@ public class PlaybackControl extends JPanel implements ViewInterface {
             }
         });
 
-		JButton playButton = new JButton("Play");
+		try {
+            img = ImageIO.read(new File("playbutton.png"));
+        } catch (IOException e) {}
+        newimg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
+		JButton playButton = new JButton(new ImageIcon(newimg));
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -102,7 +122,15 @@ public class PlaybackControl extends JPanel implements ViewInterface {
             }
         });
 
-		JButton reverseButton = new JButton("Reverse");
+		try {
+            img = ImageIO.read(new File("reverseplaybutton.png"));
+        } catch (IOException e) {}
+        newimg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
+		//ImageIcon reversePlayIcon = new ImageIcon("reverseplaybutton.png");
+        //img = reversePlayIcon.getImage();
+        //newimg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        JButton reverseButton = new JButton(new ImageIcon(newimg));
         reverseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

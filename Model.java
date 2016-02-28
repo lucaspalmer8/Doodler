@@ -47,6 +47,7 @@ public class Model {
 	//Load a new doodle
 	public void resetDoodle(ArrayList<Stroke> strokes) {
 		m_strokeList = strokes;
+		m_sliderNumber = strokes.size()*100;
 		notifyViews();
 	}
 	

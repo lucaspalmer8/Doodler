@@ -128,7 +128,7 @@ public class Doodle {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setSize(900, 600);
-        frame.setMinimumSize(new Dimension(200, 300));
+        frame.setMinimumSize(new Dimension(300, 200));
   //      m_panel2.setLayout(new BoxLayout(m_panel2, BoxLayout.X_AXIS));
     //    m_panel1.setLayout(new BoxLayout(m_panel1, BoxLayout.Y_AXIS));
       //  m_panel1.add(m_panel2);
