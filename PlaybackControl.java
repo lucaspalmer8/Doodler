@@ -17,6 +17,75 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 	private JButton endButton;
 	private JButton playButton;
 	private JButton reverseButton;
+	private boolean m_inAnimation = false;
+
+	private class SpecialTimer extends Timer {
+		private int m_index;
+
+		public SpecialTimer(int index) {
+			super(1, null);
+			setInitialDelay(0);
+			m_index = index;
+		}
+
+		@Override 
+		public void start() {
+			final Timer timer = new Timer((int)(m_model.getStrokeList().get(m_index).getElapsedTime()/100), new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent evt) {
+					System.out.println("Heyyy");
+					m_slider.setValue(m_slider.getValue() + 1);
+					if (m_slider.getValue() != m_slider.getMaximum() && m_slider.getValue() % 100 == 0) {
+						((Timer)evt.getSource()).stop();
+						new SpecialTimer(m_index + 1).start();
+					} else if (m_slider.getValue() == m_slider.getMaximum()) {
+						((Timer)evt.getSource()).stop();
+						m_slider.setEnabled(true);
+						startButton.setEnabled(true);
+                		endButton.setEnabled(true);
+                		playButton.setEnabled(true);
+                		reverseButton.setEnabled(true);
+						m_inAnimation = false;
+					}
+				}
+			});
+			timer.start();
+		}
+	}
+
+	private class SpecialReverseTimer extends Timer {
+        private int m_index;
+
+        public SpecialReverseTimer(int index) {
+            super(1, null);
+            setInitialDelay(0);
+            m_index = index;
+        }
+
+        @Override
+        public void start() {
+            final Timer timer = new Timer((int)(m_model.getStrokeList().get(m_index).getElapsedTime()/100), new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent evt) {
+                    System.out.println("Heyyy");
+                    m_slider.setValue(m_slider.getValue() - 1);
+                    if (m_slider.getValue() != m_slider.getMinimum() && m_slider.getValue() % 100 == 0) {
+                        ((Timer)evt.getSource()).stop();
+                        new SpecialReverseTimer(m_index - 1).start();
+                    } else if (m_slider.getValue() == m_slider.getMinimum()) {
+                        ((Timer)evt.getSource()).stop();
+						m_slider.setEnabled(true);
+						startButton.setEnabled(true);
+	                	endButton.setEnabled(true);
+    	            	playButton.setEnabled(true);
+        	        	reverseButton.setEnabled(true);
+						m_inAnimation = false;
+                    }
+                }
+            });
+            timer.start();
+        }
+    }
 
 	private class Slider extends JSlider {
 		private Hashtable<Integer, JLabel> m_labelTable = new Hashtable<Integer, JLabel>();
@@ -47,11 +116,14 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 		}
 
 		public void update() {
-			boolean val = m_model.getFinishedStrokes() != 0;
-			playButton.setEnabled(val);
-			reverseButton.setEnabled(val);
-			startButton.setEnabled(val);
-			endButton.setEnabled(val);
+			if (!m_inAnimation) {
+				boolean val = m_model.getFinishedStrokes() != 0;
+				playButton.setEnabled(val);
+				reverseButton.setEnabled(val);
+				startButton.setEnabled(val);
+				endButton.setEnabled(val);
+				setEnabled(val);
+			}
 			int size = m_model.getFinishedStrokes();
 			if (size*TICKS != getMaximum()) {
 				//When a new Doodle file is opened, so labels might not be in the hashtable
@@ -121,8 +193,9 @@ public class PlaybackControl extends JPanel implements ViewInterface {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+				m_inAnimation = true;
                 m_slider.setValue(m_slider.getMinimum());
-				final Timer timer = new Timer(10, new ActionListener() {
+				/*final Timer timer = new Timer(10, new ActionListener() {
     				public void actionPerformed(ActionEvent evt) {
 						System.out.println("In timeer");
 						m_slider.setValue(m_slider.getValue() + 1);
@@ -130,7 +203,13 @@ public class PlaybackControl extends JPanel implements ViewInterface {
         					((Timer)evt.getSource()).stop();
 						}
     				}
-				});
+				});*/
+				m_slider.setEnabled(false);
+				startButton.setEnabled(false);
+                endButton.setEnabled(false);
+                playButton.setEnabled(false);
+                reverseButton.setEnabled(false);
+				SpecialTimer timer = new SpecialTimer(0);
 				timer.start();
             }
         });
@@ -147,8 +226,9 @@ public class PlaybackControl extends JPanel implements ViewInterface {
         reverseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+				m_inAnimation = true;
                 m_slider.setValue(m_slider.getMaximum());
-                final Timer timer = new Timer(10, new ActionListener() {
+                /*final Timer timer = new Timer(10, new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         System.out.println("In timeer");
                         m_slider.setValue(m_slider.getValue() - 1);
@@ -156,7 +236,13 @@ public class PlaybackControl extends JPanel implements ViewInterface {
                             ((Timer)evt.getSource()).stop();
                         }
                     }
-                });
+                });*/
+				m_slider.setEnabled(false);
+				startButton.setEnabled(false);	
+				endButton.setEnabled(false);
+				playButton.setEnabled(false);
+				reverseButton.setEnabled(false);
+				SpecialReverseTimer timer = new SpecialReverseTimer(m_slider.getMaximum()/100 - 1);
                 timer.start();
             }
         });

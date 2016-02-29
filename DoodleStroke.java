@@ -10,6 +10,7 @@ public class DoodleStroke implements Serializable {
 	private int m_width;
 	private boolean m_finished;
 	transient private Model m_model = null;
+	private long m_elapsedTime;
 
 	//For loading old Doodle
 	public DoodleStroke(int width, Color color) {
@@ -24,6 +25,14 @@ public class DoodleStroke implements Serializable {
 		m_color = m_model.getColor();
 		m_width = m_model.getWidth();
 		m_finished = false;
+	}
+
+	public void setElapsedTime(long time) {
+		m_elapsedTime = time;
+	}
+
+	public long getElapsedTime() {
+		return m_elapsedTime;
 	}
 
 	 public class DoodlePoint implements Serializable {
@@ -111,7 +120,7 @@ public class DoodleStroke implements Serializable {
 			//if (totalTime == 0) {int k = 100/0;}
 			float drawingRatio;
 			if (totalTime == 0) {
-				drawingRatio = 1;
+				drawingRatio = 0;
 			} else {
 				drawingRatio = (point.getTimeStamp() - first.getTimeStamp())/totalTime;
 			}

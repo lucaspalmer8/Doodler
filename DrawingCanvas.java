@@ -25,7 +25,7 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
            	}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				m_model.strokeFinished();
+				m_model.strokeFinished(System.currentTimeMillis());
 			}
         });
 

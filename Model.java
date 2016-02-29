@@ -124,8 +124,10 @@ public class Model {
 		notifyViews();
 	}
 
-	public void strokeFinished() {
+	public void strokeFinished(long time) {
 		m_strokeList.get(m_strokeList.size() - 1).finished();
+		m_strokeList.get(m_strokeList.size() - 1)
+				.setElapsedTime(time - m_strokeList.get(m_strokeList.size() - 1).getPointList().get(0).getTimeStamp());
 		m_sliderNumber = m_strokeList.size()*100;
 		System.out.println("Settin the model slider number to::   " + m_sliderNumber);
 		notifyViews();
