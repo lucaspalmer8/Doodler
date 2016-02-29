@@ -96,7 +96,7 @@ class MenuBar extends JMenuBar implements ViewInterface {
 		ActionListener newDoodleListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("new");
+                //System.out.println("new");
 				if (m_model.getStrokeList().size() != 0) {
 					Object[] options = {"Yes, please", "No, thanks"};
 					int n = JOptionPane.showOptionDialog(m_model.getFrame(),
@@ -213,7 +213,7 @@ class MenuBar extends JMenuBar implements ViewInterface {
 						//bufferedWriter.close();
 			
 					} catch(IOException ex) {
-						System.out.println("Error writing to file '" + fileName + "'");
+						//System.out.println("Error writing to file '" + fileName + "'");
 					}
 				} else if (ext.equals(".ser")) {
 
@@ -228,8 +228,8 @@ class MenuBar extends JMenuBar implements ViewInterface {
 							output.close();
 						}
     				} catch(IOException ex) {
-						System.out.println(ex);
-						System.out.println("Error writing to file '" + fileName + "'");
+						//System.out.println(ex);
+						//System.out.println("Error writing to file '" + fileName + "'");
 					}
 				}	
             }
@@ -326,10 +326,10 @@ class MenuBar extends JMenuBar implements ViewInterface {
 						//if (bufferedReader.readLine() == null) System.out.println("YayyyyiyyyyyyyyyyyyyyYYY");
 						//bufferedReader.close();         
 					} catch(FileNotFoundException ex) {
-						System.out.println("Unable to open file '" + fileName + "'");       
-						System.out.println(ex);         
+					//	System.out.println("Unable to open file '" + fileName + "'");       
+					//	System.out.println(ex);         
 					} catch(IOException ex) {
-						System.out.println("Error reading file '" + fileName + "'");                  
+					//	System.out.println("Error reading file '" + fileName + "'");                  
 					}
 				} else if (ext.equals(".ser")) {
 					try {					
@@ -341,20 +341,20 @@ class MenuBar extends JMenuBar implements ViewInterface {
 
 						try {
 							Object theOne = input.readObject();
-								strokeList = (ArrayList<DoodleStroke>)theOne;
+							strokeList = (ArrayList<DoodleStroke>)theOne;
 							for (DoodleStroke stroke : strokeList) {
 								stroke.setModel(m_model);
 							}
 							m_model.resetDoodle(strokeList);
 						} catch(ClassNotFoundException ex) {
-							System.out.println(ex);
+							//System.out.println(ex);
 						} catch(IOException ex){
-							System.out.println(ex);
+							//System.out.println(ex);
 						} finally {
 							input.close();
 						}
 					} catch (IOException ex) {
-						System.out.println(ex);
+						//System.out.println(ex);
 					}
 				}
             }
@@ -363,7 +363,7 @@ class MenuBar extends JMenuBar implements ViewInterface {
 		ActionListener exitDoodleListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("exit");
+                //System.out.println("exit");
 				if (m_model.getStrokeList().size() != 0) {
 					Object[] options = {"Yes, please", "No, thanks"};
                 	int n = JOptionPane.showOptionDialog(m_model.getFrame(),

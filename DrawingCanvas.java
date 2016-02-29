@@ -54,7 +54,7 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
 
 	@Override
 	public void notifyView() {
-		System.out.println("Repainting canvas aaaaaa");
+		//System.out.println("Repainting canvas aaaaaa");
 		repaint();
 		revalidate();
 	}
@@ -86,7 +86,7 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
            	    RenderingHints.VALUE_ANTIALIAS_ON);
        	//for (Model.Stroke stroke : m_model.getStrokeList()) {
 		for (int i = 0; i < m_model.getStrokeList().size(); i++) {
-			System.out.println("Drawing the stroke: " + i);
+			//System.out.println("Drawing the stroke: " + i);
            	m_model.getStrokeList().get(i).draw(g2, i);
        	}
   	}

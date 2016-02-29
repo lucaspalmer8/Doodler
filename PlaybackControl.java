@@ -33,7 +33,7 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 			final Timer timer = new Timer((int)(m_model.getStrokeList().get(m_index).getElapsedTime()/100), new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent evt) {
-					System.out.println("Heyyy");
+					//System.out.println("Heyyy");
 					m_slider.setValue(m_slider.getValue() + 1);
 					if (m_slider.getValue() != m_slider.getMaximum() && m_slider.getValue() % 100 == 0) {
 						((Timer)evt.getSource()).stop();
@@ -67,7 +67,7 @@ public class PlaybackControl extends JPanel implements ViewInterface {
             final Timer timer = new Timer((int)(m_model.getStrokeList().get(m_index).getElapsedTime()/100), new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent evt) {
-                    System.out.println("Heyyy");
+                    //System.out.println("Heyyy");
                     m_slider.setValue(m_slider.getValue() - 1);
                     if (m_slider.getValue() != m_slider.getMinimum() && m_slider.getValue() % 100 == 0) {
                         ((Timer)evt.getSource()).stop();
@@ -107,8 +107,8 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 			addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					System.out.println("HelllooooooooooooO");
-					System.out.println("The value is::::::: " + getValue());
+					//System.out.println("HelllooooooooooooO");
+					//System.out.println("The value is::::::: " + getValue());
 					if (m_code) return;
 					m_model.setSliderNumber(getValue());
 				}

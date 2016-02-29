@@ -129,9 +129,9 @@ public class Model {
 		m_strokeList.get(m_strokeList.size() - 1)
 				.setElapsedTime(time - m_strokeList.get(m_strokeList.size() - 1).getPointList().get(0).getTimeStamp());
 		m_sliderNumber = m_strokeList.size()*100;
-		System.out.println("Settin the model slider number to::   " + m_sliderNumber);
+		//System.out.println("Settin the model slider number to::   " + m_sliderNumber);
 		notifyViews();
-		System.out.println("Stroke finished");
+		//System.out.println("Stroke finished");
 	}
 	
 	public int getFinishedStrokes() {
