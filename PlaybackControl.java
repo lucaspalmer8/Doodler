@@ -13,6 +13,10 @@ import javax.imageio.ImageIO;
 public class PlaybackControl extends JPanel implements ViewInterface {
    	private Model m_model;
 	private Slider m_slider = new Slider();
+	private JButton startButton;
+	private JButton endButton;
+	private JButton playButton;
+	private JButton reverseButton;
 
 	private class Slider extends JSlider {
 		private Hashtable<Integer, JLabel> m_labelTable = new Hashtable<Integer, JLabel>();
@@ -43,6 +47,11 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 		}
 
 		public void update() {
+			boolean val = m_model.getFinishedStrokes() != 0;
+			playButton.setEnabled(val);
+			reverseButton.setEnabled(val);
+			startButton.setEnabled(val);
+			endButton.setEnabled(val);
 			int size = m_model.getFinishedStrokes();
 			if (size*TICKS != getMaximum()) {
 				//When a new Doodle file is opened, so labels might not be in the hashtable
@@ -82,7 +91,7 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 		} catch (IOException e) {}
 		newimg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH); 
 	
-		JButton startButton = new JButton(new ImageIcon(newimg));
+		startButton = new JButton(new ImageIcon(newimg));
 		startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,7 +104,7 @@ public class PlaybackControl extends JPanel implements ViewInterface {
         } catch (IOException e) {}
         newimg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 
-		JButton endButton = new JButton(new ImageIcon(newimg));
+		endButton = new JButton(new ImageIcon(newimg));
         endButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -108,7 +117,7 @@ public class PlaybackControl extends JPanel implements ViewInterface {
         } catch (IOException e) {}
         newimg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 
-		JButton playButton = new JButton(new ImageIcon(newimg));
+		playButton = new JButton(new ImageIcon(newimg));
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -134,7 +143,7 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 		//ImageIcon reversePlayIcon = new ImageIcon("reverseplaybutton.png");
         //img = reversePlayIcon.getImage();
         //newimg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        JButton reverseButton = new JButton(new ImageIcon(newimg));
+        reverseButton = new JButton(new ImageIcon(newimg));
         reverseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
