@@ -11,7 +11,8 @@ CLASSES = \
 	Model.java \
     ViewInterface.java \
 	DrawingCanvas.java \
-	DrawingSelector.java
+	DrawingSelector.java \
+	DoodleStroke.java
 
 MAIN = Doodle
 

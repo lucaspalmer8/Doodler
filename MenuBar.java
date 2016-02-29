@@ -9,6 +9,7 @@ class MenuBar extends JMenuBar implements ViewInterface {
 	private Model m_model;
 	private JRadioButtonMenuItem fullSize;
 	private JRadioButtonMenuItem fitSize; 
+	private JFileChooser chooser = new JFileChooser();
 
 	@Override
 	public void notifyView() {
@@ -18,10 +19,18 @@ class MenuBar extends JMenuBar implements ViewInterface {
 	}
 
 	private int getInt(String string) {
+		return Integer.parseInt(string);
+	}
+
+	private float getFloat(String string) {
+		float retval;
 		if (string.startsWith("-")) { 
 			string = string.substring(1);
+			retval = -1*Float.valueOf(string);
+		} else {
+			retval = Float.valueOf(string);
 		}
-		return Integer.parseInt(string);
+		return retval;
 	}
 
 	public MenuBar(Model model) {
@@ -31,6 +40,40 @@ class MenuBar extends JMenuBar implements ViewInterface {
         JMenu viewMenu = new JMenu("View");
         add(fileMenu);
         add(viewMenu);
+
+		chooser.setAcceptAllFileFilterUsed(false);
+		//Add the filters for .ser files and .txt files
+		chooser.addChoosableFileFilter(new javax.swing.filechooser.FileFilter() {
+			@Override
+			public boolean accept(File f) {
+        		if (f.isDirectory()) {
+            		return true;
+          		}
+				String s = f.getName();
+				return s.endsWith(".txt") || s.endsWith(".TXT");
+   			}
+			
+			@Override
+   			public String getDescription() {
+       			return "*.txt,*.TXT";
+  			}
+		});
+
+		chooser.addChoosableFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) {
+                    return true;
+                }
+                String s = f.getName();
+                return s.endsWith(".ser") || s.endsWith(".SER");
+            }
+
+            @Override
+            public String getDescription() {
+                return "*.ser,*.SER";
+            }
+        });
 
 		ActionListener fullView = new ActionListener() {
 			@Override
@@ -52,7 +95,34 @@ class MenuBar extends JMenuBar implements ViewInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("new");
-				m_model.resetDefault();
+/*				final JOptionPane optionPane = new JOptionPane(
+    "The only way to close this dialog is by\n"
+    + "pressing one of the following buttons.\n"
+    + "Do you understand?",
+    JOptionPane.QUESTION_MESSAGE,
+    JOptionPane.YES_NO_OPTION);
+
+			optionPane.show();
+*/
+//				JOptionPane.showMessageDialog(m_model.getFrame(), "Eggs are not supposed to be green.");
+				//Custom button text
+				Object[] options = {"Yes, please", "No, thanks"};
+				int n = JOptionPane.showOptionDialog(m_model.getFrame(),
+    				"Are you sure you want to create\na new Doodle without saving?",
+    				"Save Document?",
+    				JOptionPane.YES_NO_OPTION,
+    				JOptionPane.QUESTION_MESSAGE,
+    				null,
+    				options,
+    				options[1]);
+
+				if (n == 0) {
+					m_model.resetDefault();
+				}
+System.out.println("The reslut if :::::::::::::::::;   " + n);
+
+
+				//m_model.resetDefault();
                 //m_model.setFullSize(false);
             }
         };
@@ -61,123 +131,224 @@ class MenuBar extends JMenuBar implements ViewInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //System.out.println("save");
-				final JFileChooser chooser = new JFileChooser();
+//				final JFileChooser chooser = new JFileChooser();
 				int returnVal = chooser.showSaveDialog(m_model.getFrame());
-				if (chooser.getSelectedFile() == null) return;
-				String path = chooser.getSelectedFile().getAbsolutePath() + ".txt";
-				String fileName = chooser.getSelectedFile().getName() + ".txt";
+				//if (chooser.getSelectedFile() == null) return;
+				String ext = "";
+				if (returnVal == chooser.APPROVE_OPTION) {
+					String extension = chooser.getFileFilter().getDescription();
 
-        		try {
-            		FileWriter fileWriter = new FileWriter(path);
-					BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+       				if (extension.equals("*.ser,*.SER")) { 
+          				ext = ".ser";
+      				}
+					if (extension.equals("*.txt,*.TXT")) {
+						ext = ".txt";
+					}
+				} else {
+					return;
+				}
 
-            		// Note that write() does not automatically
-            		// append a newline character.
-					bufferedWriter.write(String.valueOf(m_model.getStrokeList().size()));
-					bufferedWriter.newLine();
-					for (int i = 0; i < m_model.getStrokeList().size(); i++) {
-						Model.Stroke stroke = m_model.getStrokeList().get(i);
-						
-						int width = stroke.getWidth();
-						bufferedWriter.write(String.valueOf(width));
-	                    bufferedWriter.newLine();
+				String path = chooser.getSelectedFile().getAbsolutePath() + ext;
+				String fileName = chooser.getSelectedFile().getName() + ext;
 
-						Color color = stroke.getColor();
-						bufferedWriter.write(String.valueOf(color.getBlue()));
-        	            bufferedWriter.newLine();
-						bufferedWriter.write(String.valueOf(color.getRed()));
-    	                bufferedWriter.newLine();
-						bufferedWriter.write(String.valueOf(color.getGreen()));
-	                    bufferedWriter.newLine();
+				if (ext == ".txt") {
+					try {
+						FileWriter fileWriter = new FileWriter(path);
+						BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-						ArrayList<Model.Point> pointList = stroke.getPointList();
-						bufferedWriter.write(String.valueOf(pointList.size()));
-    	                bufferedWriter.newLine();
-						for(int j = 0; j < pointList.size(); j++) {
-							Model.Point point = pointList.get(j);
-							bufferedWriter.write(String.valueOf(point.getX()));
-        		            bufferedWriter.newLine();
-							bufferedWriter.write(String.valueOf(point.getY()));
-		                    bufferedWriter.newLine();
-							bufferedWriter.write(String.valueOf(point.getTimeStamp()));
+						// Note that write() does not automatically
+						// append a newline character.
+						try {
+							bufferedWriter.write(String.valueOf(m_model.getStrokeList().size()));
 							bufferedWriter.newLine();
-						}
-	
-					}					
+							for (int i = 0; i < m_model.getStrokeList().size(); i++) {
+								DoodleStroke stroke = m_model.getStrokeList().get(i);
+								
+								int width = stroke.getWidth();
+								bufferedWriter.write(String.valueOf(width));
+								bufferedWriter.newLine();
 
-            		/*bufferedWriter.write("Hello there,");
-            		bufferedWriter.write(" here is some text.");
-            		bufferedWriter.newLine();
-            		bufferedWriter.write("We are writing");
-            		bufferedWriter.write(" the text to the file.");
-*/
-            		bufferedWriter.close();
-        
-				} catch(IOException ex) {
-            		System.out.println("Error writing to file '" + fileName + "'");
-        		}	
+								Color color = stroke.getColor();
+								bufferedWriter.write(String.valueOf(color.getBlue()));
+								bufferedWriter.newLine();
+								bufferedWriter.write(String.valueOf(color.getRed()));
+								bufferedWriter.newLine();
+								bufferedWriter.write(String.valueOf(color.getGreen()));
+								bufferedWriter.newLine();
+
+								ArrayList<DoodleStroke.DoodlePoint> pointList = stroke.getPointList();
+								bufferedWriter.write(String.valueOf(pointList.size()));
+								bufferedWriter.newLine();
+								for(int j = 0; j < pointList.size(); j++) {
+									DoodleStroke.DoodlePoint point = pointList.get(j);
+									bufferedWriter.write(String.valueOf(point.getFloatX()));
+									bufferedWriter.newLine();
+									bufferedWriter.write(String.valueOf(point.getFloatY()));
+									bufferedWriter.newLine();
+									bufferedWriter.write(String.valueOf(point.getTimeStamp()));
+									bufferedWriter.newLine();
+								}
+							}
+						} finally { 
+							bufferedWriter.close();
+						}					
+
+						/*bufferedWriter.write("Hello there,");
+						bufferedWriter.write(" here is some text.");
+						bufferedWriter.newLine();
+						bufferedWriter.write("We are writing");
+						bufferedWriter.write(" the text to the file.");
+	*/
+						//bufferedWriter.close();
+			
+					} catch(IOException ex) {
+						System.out.println("Error writing to file '" + fileName + "'");
+					}
+				} else if (ext == ".ser") {
+
+					try {
+      					OutputStream file = new FileOutputStream(path);
+      					OutputStream buffer = new BufferedOutputStream(file);
+      					ObjectOutput output = new ObjectOutputStream(buffer);
+						ArrayList<DoodleStroke> list = m_model.getStrokeList();
+						try {
+    						output.writeObject(list);
+						} finally {
+							output.close();
+						}
+    				} catch(IOException ex) {
+						System.out.println(ex);
+						System.out.println("Error writing to file '" + fileName + "'");
+					}
+				}	
             }
         };
 
 		ActionListener loadDoodleListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-				final JFileChooser chooser = new JFileChooser();
+//				final JFileChooser chooser = new JFileChooser();
                 int returnVal = chooser.showOpenDialog(m_model.getFrame());
-				if (chooser.getSelectedFile() == null) return;
+				
+				String ext = "";
+                if (returnVal == chooser.APPROVE_OPTION) {
+                    String extension = chooser.getFileFilter().getDescription();
+
+                    if (extension.equals("*.ser,*.SER")) {
+                        ext = ".ser";
+                    }
+                    if (extension.equals("*.txt,*.TXT")) {
+                        ext = ".txt";
+                    }
+                } else {
+                    return;
+                }
+
                 String path = chooser.getSelectedFile().getAbsolutePath();
                 String fileName = chooser.getSelectedFile().getName();
 
 				String line = null;
-               	try {
-            		FileReader fileReader = new FileReader(path);
-		            BufferedReader bufferedReader = new BufferedReader(fileReader);
+				if (ext == ".txt") {
+					try {
+						FileReader fileReader = new FileReader(path);
+						BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-					ArrayList<Model.Stroke> strokeList = new ArrayList<Model.Stroke>();
+						ArrayList<DoodleStroke> strokeList = new ArrayList<DoodleStroke>();
 
-					line = bufferedReader.readLine();
-					int size = getInt(line);
-                    for (int i = 0; i < size; i++) {
-                        //Model.Stroke stroke = m_model.getStrokeList().get(i);
+						try {
+							line = bufferedReader.readLine();
+							int size = getInt(line);
+							for (int i = 0; i < size; i++) {
+								//Model.Stroke stroke = m_model.getStrokeList().get(i);
+								
+								line = bufferedReader.readLine();
+								int width = getInt(line);
+
+								//Color color = stroke.getColor();
+								line = bufferedReader.readLine();
+								int blue = getInt(line);
+								line = bufferedReader.readLine();
+								int red = getInt(line);
+								line = bufferedReader.readLine();
+								int green = getInt(line);
 						
-						line = bufferedReader.readLine();
-						int width = getInt(line);
+								DoodleStroke stroke = new DoodleStroke(width, new Color(red, green, blue));	
+								stroke.setModel(m_model);
 
-                        //Color color = stroke.getColor();
-						line = bufferedReader.readLine();
-						int blue = getInt(line);
-						line = bufferedReader.readLine();
-						int red = getInt(line);
-						line = bufferedReader.readLine();
-						int green = getInt(line);
-				
-						Model.Stroke stroke = m_model.new Stroke(width, new Color(red, green, blue));	
+								//ArrayList<Model.Point> pointList = stroke.getPointList();
+								line = bufferedReader.readLine();
+								int pointListSize = getInt(line);
+								for(int j = 0; j < pointListSize; j++) {
+									line = bufferedReader.readLine();
+									float x = getFloat(line);
+									line = bufferedReader.readLine();
+									float y = getFloat(line);
+									line = bufferedReader.readLine();
+									long time = Long.parseLong(line);
 
-                        //ArrayList<Model.Point> pointList = stroke.getPointList();
-						line = bufferedReader.readLine();
-						int pointListSize = getInt(line);
-                        for(int j = 0; j < pointListSize; j++) {
-							line = bufferedReader.readLine();
-							int x = getInt(line);
-							line = bufferedReader.readLine();
-							int y = getInt(line);
-							line = bufferedReader.readLine();
-							long time = Long.parseLong(line);
+									stroke.addPoint(x, y, time);
+									//Model.Point point = pointList.get(j);
+									//bufferedWriter.write(point.getY());
+								}
+								strokeList.add(stroke);
+							}
+						} finally {
+							bufferedReader.close();
+						}
+							
+						m_model.resetDoodle(strokeList);
+					
+						//if (bufferedReader.readLine() == null) System.out.println("YayyyyiyyyyyyyyyyyyyyYYY");
+						//bufferedReader.close();         
+					} catch(FileNotFoundException ex) {
+						System.out.println("Unable to open file '" + fileName + "'");       
+						System.out.println(ex);         
+					} catch(IOException ex) {
+						System.out.println("Error reading file '" + fileName + "'");                  
+					}
+				} else if (ext == ".ser") {
+					try {					
+						InputStream file = new FileInputStream(path);
+						InputStream buffer = new BufferedInputStream(file);
+						ObjectInput input = new ObjectInputStream (buffer);
+		
+						ArrayList<DoodleStroke> strokeList = new ArrayList<DoodleStroke>();
 
-							stroke.addPoint(m_model.new Point(x, y, time));
-                            //Model.Point point = pointList.get(j);
-                            //bufferedWriter.write(point.getY());
-                        }
-						strokeList.add(stroke);
-                    }
-					m_model.resetDoodle(strokeList);
-					if (bufferedReader.readLine() == null) System.out.println("YayyyyiyyyyyyyyyyyyyyYYY");
-					bufferedReader.close();         
-        		} catch(FileNotFoundException ex) {
-            		System.out.println("Unable to open file '" + fileName + "'");                
-        		} catch(IOException ex) {
-            		System.out.println("Error reading file '" + fileName + "'");                  
-        		}
+						try {
+							//deserialize the List
+//							try {
+								Object theOne = input.readObject();
+								//if (theOne instanceof List<DoodleStroke>) {
+									strokeList = (ArrayList<DoodleStroke>)theOne;
+								//}
+								//aif (
+								//strokeList = (ArrayList<DoodleStroke>)input.readObject();
+								System.out.println("The size is:::::::::::   " + strokeList.size());
+								for (DoodleStroke stroke : strokeList) {
+									stroke.setModel(m_model);
+									//stroke.setColor(Color.BLACK);
+									System.out.println(stroke.getColor());
+									System.out.println(stroke.getWidth());
+									//System.out.println(stroke.getPointSize());
+									System.out.println(stroke.isFinished());
+									//stroke.info();
+
+								}
+//							} finally {
+//								input.close();
+//							}
+							m_model.resetDoodle(strokeList);
+						} catch(ClassNotFoundException ex) {
+							System.out.println(ex);
+						} catch(IOException ex){
+							System.out.println(ex);
+						} finally {
+							input.close();
+						}
+					} catch (IOException ex) {
+						System.out.println(ex);
+					}
+				}
             }
         };
 
@@ -185,6 +356,7 @@ class MenuBar extends JMenuBar implements ViewInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("exit");
+				System.exit(0);
                 //m_model.setFullSize(false);
             }
         };

@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 
 public class Doodle {
 
@@ -38,17 +39,7 @@ public class Doodle {
 		model.addObserver(menuBar);
 
 		//Create view/controller and tell it about model.
-        DrawingCanvas drawingCanvas = new DrawingCanvas(model, true) {
-			@Override
-    		public Dimension getPreferredSize() {
-            	return new Dimension(700, 400);
-    		}
-
-    		@Override
-    		public Dimension getMaximumSize() {
-            	return new Dimension(700, 400);
-    		}
-		};
+        DrawingCanvas drawingCanvas = new DrawingCanvas(model, true);
 		model.addObserver(drawingCanvas);
 
 		//Create view/controller and tell it about model.

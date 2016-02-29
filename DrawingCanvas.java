@@ -18,8 +18,8 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
            	public void mousePressed(MouseEvent e) {
 				float x = (float)e.getX()*Model.CANVAS_WIDTH/getWidth();
 				float y = (float)e.getY()*Model.CANVAS_HEIGHT/getHeight();
-				Model.Point point =  m_model.new Point(x, y, System.currentTimeMillis());
-               	m_model.newStroke(point);
+				//Model.Point point =  m_model.new Point(x, y, System.currentTimeMillis());
+               	m_model.newStroke(x, y, System.currentTimeMillis());
 //               	repaint();
 //				System.out.println(getWidth() + "   " + getHeight());
            	}
@@ -34,12 +34,23 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
            	public void mouseDragged(MouseEvent e) {
 				float x = (float)e.getX()*Model.CANVAS_WIDTH/getWidth();
                 float y = (float)e.getY()*Model.CANVAS_HEIGHT/getHeight();
-                Model.Point point =  m_model.new Point(x, y, System.currentTimeMillis());
-               	m_model.extendStroke(point);
+                //Model.Point point =  m_model.new Point(x, y, System.currentTimeMillis());
+               	m_model.extendStroke(x, y, System.currentTimeMillis());
   //             	repaint();
            	}
        	});
     }
+
+	@Override
+    public Dimension getPreferredSize() {
+    	return new Dimension(Model.CANVAS_WIDTH, Model.CANVAS_HEIGHT);
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+        return new Dimension(Model.CANVAS_WIDTH, Model.CANVAS_HEIGHT);
+    }
+
 
 	@Override
 	public void notifyView() {
@@ -48,7 +59,7 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
 		revalidate();
 	}
 
-	@Override
+/*	@Override
 	public Dimension getPreferredSize() {
 //		if (m_model.getFullSize()) {
 			return new Dimension(m_model.CANVAS_WIDTH, m_model.CANVAS_HEIGHT);
@@ -66,7 +77,7 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
 	//		return super.getMaximumSize();//new Dimension(getParent().getWidth(), getParent().getHeight());
 	//	}
 	}
-
+*/
 	@Override    
    	public void paintComponent(Graphics g) {
 		super.paintComponent(g);

@@ -45,7 +45,11 @@ public class PlaybackControl extends JPanel implements ViewInterface {
 		public void update() {
 			int size = m_model.getFinishedStrokes();
 			if (size*TICKS != getMaximum()) {
-				m_labelTable.put(new Integer(size*TICKS), new JLabel(Integer.toString(size)));
+				//When a new Doodle file is opened, so labels might not be in the hashtable
+				//So add them all up to the current number of strokes
+				for (int i = 1; i <= size; i++) {
+					m_labelTable.put(new Integer(i*TICKS), new JLabel(Integer.toString(i)));
+				}
 				setLabelTable(m_labelTable);
 //				System.out.println("Setting value to ::::  " + m_model.getSliderNumber());
 //				setValue(m_model.getSliderNumber());
