@@ -12,7 +12,9 @@ CLASSES = \
     ViewInterface.java \
 	DrawingCanvas.java \
 	DrawingSelector.java \
-	DoodleStroke.java
+	DoodleStroke.java \
+	PlaybackControl.java \
+	MenuBar.java
 
 MAIN = Doodle
 
