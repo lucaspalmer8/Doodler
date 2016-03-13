@@ -7,16 +7,16 @@ import java.util.ArrayList;
 
 class MenuBar extends JMenuBar implements ViewInterface {
 	private Model m_model;
-	private JRadioButtonMenuItem fullSize;
-	private JRadioButtonMenuItem fitSize; 
-	private JFileChooser chooser = new JFileChooser();
-	private JMenuItem saveDoodle;
+	private JRadioButtonMenuItem m_fullSize;
+	private JRadioButtonMenuItem m_fitSize; 
+	private JFileChooser m_chooser = new JFileChooser();
+	private JMenuItem m_saveDoodle;
 
 	@Override
 	public void notifyView() {
-		saveDoodle.setEnabled(m_model.getFinishedStrokes() != 0);
+		m_saveDoodle.setEnabled(m_model.getFinishedStrokes() != 0);
 		if (m_model.getFullSize()) {
-			fullSize.setSelected(true);
+			m_fullSize.setSelected(true);
 		}
 	}
 
@@ -37,120 +37,105 @@ class MenuBar extends JMenuBar implements ViewInterface {
 
 	public MenuBar(Model model) {
 		m_model = model;
-		//JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("File");
-        JMenu viewMenu = new JMenu("View");
-        add(fileMenu);
-        add(viewMenu);
+		JMenu fileMenu = new JMenu("File");
+		JMenu viewMenu = new JMenu("View");
+		add(fileMenu);
+		add(viewMenu);
 
-		//chooser.setAcceptAllFileFilterUsed(false);
-		//Add the filters for .ser files and .txt files
-		chooser.addChoosableFileFilter(new javax.swing.filechooser.FileFilter() {
+		m_chooser.addChoosableFileFilter(new javax.swing.filechooser.FileFilter() {
 			@Override
 			public boolean accept(File f) {
-        		if (f.isDirectory()) {
-            		return true;
-          		}
+				if (f.isDirectory()) {
+					return true;
+				}
 				String s = f.getName();
-				return s.endsWith(".txt");// || s.endsWith(".TXT");
-   			}
+				return s.endsWith(".txt");
+			}
 			
 			@Override
-   			public String getDescription() {
-       			return "*.txt,*.TXT";
-  			}
+			public String getDescription() {
+				return "*.txt,*.TXT";
+			}
 		});
 
-		chooser.addChoosableFileFilter(new javax.swing.filechooser.FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                if (f.isDirectory()) {
-                    return true;
-                }
-                String s = f.getName();
-                return s.endsWith(".ser");// || s.endsWith(".SER");
-            }
+		m_chooser.addChoosableFileFilter(new javax.swing.filechooser.FileFilter() {
+			@Override
+			public boolean accept(File f) {
+				if (f.isDirectory()) {
+					return true;
+				}
+				String s = f.getName();
+				return s.endsWith(".ser");
+			}
 
-            @Override
-            public String getDescription() {
-                return "*.ser,*.SER";
-            }
-        });
+			@Override
+			public String getDescription() {
+				return "*.ser,*.SER";
+			}
+		});
 
 		ActionListener fullView = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//System.out.println("Hello1");
 				m_model.setFullSize(true);
 			}
 		};
 
 		ActionListener fitView = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //System.out.println("Hello2");
+			@Override
+			public void actionPerformed(ActionEvent e) {
 				m_model.setFullSize(false);
-            }
-        };
+			}
+		};
 
 		ActionListener newDoodleListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //System.out.println("new");
+			@Override
+			public void actionPerformed(ActionEvent e) {
 				if (m_model.getStrokeList().size() != 0) {
 					Object[] options = {"Yes, please", "No, thanks"};
 					int n = JOptionPane.showOptionDialog(m_model.getFrame(),
-    					"Are you sure you want to create\na new Doodle without saving?",
-    					"Save Document?",
-    					JOptionPane.YES_NO_OPTION,
-    					JOptionPane.QUESTION_MESSAGE,
-    					null,
-    					options,
-    					options[1]);
+						"Are you sure you want to create\na new Doodle without saving?",
+						"Save Document?",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null,
+						options,
+						options[1]);
 					if (n == 1) {
 						return;
 					}
 				}
 
 				m_model.resetDefault();
-				
-//System.out.println("The reslut if :::::::::::::::::;   " + n);
-
-
-				//m_model.resetDefault();
-                //m_model.setFullSize(false);
-            }
-        };
+			}
+		};
 
 		ActionListener saveDoodleListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 				if (m_model.getStrokeList().size() == 0) {
 					Object[] options = {"Yes, please", "No, thanks"};
-                	int n = JOptionPane.showOptionDialog(m_model.getFrame(),
-                    	"Are you sure you want to save\nan empty Doodle?",
-                    	"Save Document?",
-                    	JOptionPane.YES_NO_OPTION,
-                    	JOptionPane.QUESTION_MESSAGE,
-                    	null,
-                    	options,
-                    	options[1]);
+					int n = JOptionPane.showOptionDialog(m_model.getFrame(),
+						"Are you sure you want to save\nan empty Doodle?",
+						"Save Document?",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null,
+						options,
+						options[1]);
 					if (n == 1) {
 						return;
 					}
 				}
 
-                //System.out.println("save");
-//				final JFileChooser chooser = new JFileChooser();
-				int returnVal = chooser.showSaveDialog(m_model.getFrame());
-				//if (chooser.getSelectedFile() == null) return;
+				int returnVal = m_chooser.showSaveDialog(m_model.getFrame());
 				String ext = "";
-				if (returnVal == chooser.APPROVE_OPTION) {
-					String extension = chooser.getFileFilter().getDescription();
+				if (returnVal == m_chooser.APPROVE_OPTION) {
+					String extension = m_chooser.getFileFilter().getDescription();
 
-       				if (extension.equals("*.ser,*.SER")) { 
-          				ext = ".ser";
-      				} else if (extension.equals("*.txt,*.TXT")) {
+					if (extension.equals("*.ser,*.SER")) { 
+						ext = ".ser";
+					} else if (extension.equals("*.txt,*.TXT")) {
 						ext = ".txt";
 					} else {
 						ext = ".txt";
@@ -159,8 +144,8 @@ class MenuBar extends JMenuBar implements ViewInterface {
 					return;
 				}
 
-				String path = chooser.getSelectedFile().getAbsolutePath() + ext;
-				String fileName = chooser.getSelectedFile().getName() + ext;
+				String path = m_chooser.getSelectedFile().getAbsolutePath() + ext;
+				String fileName = m_chooser.getSelectedFile().getName() + ext;
 
 				if (ext.equals(".txt")) {
 					try {
@@ -204,51 +189,39 @@ class MenuBar extends JMenuBar implements ViewInterface {
 							bufferedWriter.close();
 						}					
 
-						/*bufferedWriter.write("Hello there,");
-						bufferedWriter.write(" here is some text.");
-						bufferedWriter.newLine();
-						bufferedWriter.write("We are writing");
-						bufferedWriter.write(" the text to the file.");
-	*/
-						//bufferedWriter.close();
-			
 					} catch(IOException ex) {
-						//System.out.println("Error writing to file '" + fileName + "'");
 					}
 				} else if (ext.equals(".ser")) {
 
 					try {
-      					OutputStream file = new FileOutputStream(path);
-      					OutputStream buffer = new BufferedOutputStream(file);
-      					ObjectOutput output = new ObjectOutputStream(buffer);
+						OutputStream file = new FileOutputStream(path);
+						OutputStream buffer = new BufferedOutputStream(file);
+						ObjectOutput output = new ObjectOutputStream(buffer);
 						ArrayList<DoodleStroke> list = m_model.getStrokeList();
 						try {
-    						output.writeObject(list);
+							output.writeObject(list);
 						} finally {
 							output.close();
 						}
-    				} catch(IOException ex) {
-						//System.out.println(ex);
-						//System.out.println("Error writing to file '" + fileName + "'");
+					} catch(IOException ex) {
 					}
 				}	
-            }
-        };
+			}
+		};
 
 		ActionListener loadDoodleListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-//				final JFileChooser chooser = new JFileChooser();
+			@Override
+			public void actionPerformed(ActionEvent e) {
 				if (m_model.getStrokeList().size() != 0) {
 					Object[] options = {"Yes, please", "No, thanks"};
-                	int n = JOptionPane.showOptionDialog(m_model.getFrame(),
-                    	"Are you sure you want to load a new Doodle\nwithout saving this one?",
-                    	"Save Document?",
-                    	JOptionPane.YES_NO_OPTION,
-                    	JOptionPane.QUESTION_MESSAGE,
-                    	null,
-                    	options,
-                    	options[1]);
+					int n = JOptionPane.showOptionDialog(m_model.getFrame(),
+						"Are you sure you want to load a new Doodle\nwithout saving this one?",
+						"Save Document?",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null,
+						options,
+						options[1]);
 				
 					if (n == 1) {
 						return;
@@ -256,15 +229,15 @@ class MenuBar extends JMenuBar implements ViewInterface {
 				}
 
 
-                int returnVal = chooser.showOpenDialog(m_model.getFrame());
+				int returnVal = m_chooser.showOpenDialog(m_model.getFrame());
 				
 				String ext = "";
-                if (returnVal != chooser.APPROVE_OPTION) {
-                    return;
-                }
+				if (returnVal != m_chooser.APPROVE_OPTION) {
+					return;
+				}
 
-                String path = chooser.getSelectedFile().getAbsolutePath();
-                String fileName = chooser.getSelectedFile().getName();
+				String path = m_chooser.getSelectedFile().getAbsolutePath();
+				String fileName = m_chooser.getSelectedFile().getName();
 
 				if (path.endsWith(".txt")) {
 					ext = ".txt";
@@ -284,12 +257,9 @@ class MenuBar extends JMenuBar implements ViewInterface {
 							line = bufferedReader.readLine();
 							int size = getInt(line);
 							for (int i = 0; i < size; i++) {
-								//Model.Stroke stroke = m_model.getStrokeList().get(i);
-								
 								line = bufferedReader.readLine();
 								int width = getInt(line);
 
-								//Color color = stroke.getColor();
 								line = bufferedReader.readLine();
 								int blue = getInt(line);
 								line = bufferedReader.readLine();
@@ -300,7 +270,6 @@ class MenuBar extends JMenuBar implements ViewInterface {
 								DoodleStroke stroke = new DoodleStroke(width, new Color(red, green, blue));	
 								stroke.setModel(m_model);
 
-								//ArrayList<Model.Point> pointList = stroke.getPointList();
 								line = bufferedReader.readLine();
 								int pointListSize = getInt(line);
 								for(int j = 0; j < pointListSize; j++) {
@@ -312,8 +281,6 @@ class MenuBar extends JMenuBar implements ViewInterface {
 									long time = Long.parseLong(line);
 
 									stroke.addPoint(x, y, time);
-									//Model.Point point = pointList.get(j);
-									//bufferedWriter.write(point.getY());
 								}
 								strokeList.add(stroke);
 							}
@@ -322,14 +289,8 @@ class MenuBar extends JMenuBar implements ViewInterface {
 						}
 							
 						m_model.resetDoodle(strokeList);
-					
-						//if (bufferedReader.readLine() == null) System.out.println("YayyyyiyyyyyyyyyyyyyyYYY");
-						//bufferedReader.close();         
 					} catch(FileNotFoundException ex) {
-					//	System.out.println("Unable to open file '" + fileName + "'");       
-					//	System.out.println(ex);         
 					} catch(IOException ex) {
-					//	System.out.println("Error reading file '" + fileName + "'");                  
 					}
 				} else if (ext.equals(".ser")) {
 					try {					
@@ -347,68 +308,63 @@ class MenuBar extends JMenuBar implements ViewInterface {
 							}
 							m_model.resetDoodle(strokeList);
 						} catch(ClassNotFoundException ex) {
-							//System.out.println(ex);
 						} catch(IOException ex){
-							//System.out.println(ex);
 						} finally {
 							input.close();
 						}
 					} catch (IOException ex) {
-						//System.out.println(ex);
 					}
 				}
-            }
-        };
+			}
+		};
 
 		ActionListener exitDoodleListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //System.out.println("exit");
+			@Override
+			public void actionPerformed(ActionEvent e) {
 				if (m_model.getStrokeList().size() != 0) {
 					Object[] options = {"Yes, please", "No, thanks"};
-                	int n = JOptionPane.showOptionDialog(m_model.getFrame(),
-                    	"Are you sure you want to exit\nwithout saving the current Doodle?",
-                    	"Save Document?",
-                    	JOptionPane.YES_NO_OPTION,
-                    	JOptionPane.QUESTION_MESSAGE,
-                    	null,
-                    	options,
-                    	options[1]);
+					int n = JOptionPane.showOptionDialog(m_model.getFrame(),
+						"Are you sure you want to exit\nwithout saving the current Doodle?",
+						"Save Document?",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null,
+						options,
+						options[1]);
 					if (n == 1) {
 						return;
 					}
 				}
 
 				System.exit(0);
-                //m_model.setFullSize(false);
-            }
-        };
+			}
+		};
 
 		ButtonGroup group = new ButtonGroup();
-		fullSize = new JRadioButtonMenuItem("Full-size");
-		fitSize = new JRadioButtonMenuItem("Fit");
-		group.add(fullSize);
-		group.add(fitSize);
-		fullSize.setSelected(true);
-		fullSize.addActionListener(fullView);
-		fitSize.addActionListener(fitView);
-		viewMenu.add(fullSize);
-		viewMenu.add(fitSize);
+		m_fullSize = new JRadioButtonMenuItem("Full-size");
+		m_fitSize = new JRadioButtonMenuItem("Fit");
+		group.add(m_fullSize);
+		group.add(m_fitSize);
+		m_fullSize.setSelected(true);
+		m_fullSize.addActionListener(fullView);
+		m_fitSize.addActionListener(fitView);
+		viewMenu.add(m_fullSize);
+		viewMenu.add(m_fitSize);
 		
 		JMenuItem newDoodle = new JMenuItem("New Doodle");
 		newDoodle.addActionListener(newDoodleListener);
 		fileMenu.add(newDoodle);
 
-		saveDoodle = new JMenuItem("Save Doodle");
-        saveDoodle.addActionListener(saveDoodleListener);
-        fileMenu.add(saveDoodle);
+		m_saveDoodle = new JMenuItem("Save Doodle");
+		m_saveDoodle.addActionListener(saveDoodleListener);
+		fileMenu.add(m_saveDoodle);
 
 		JMenuItem loadDoodle = new JMenuItem("Load Doodle");
-        loadDoodle.addActionListener(loadDoodleListener);
-        fileMenu.add(loadDoodle);
+		loadDoodle.addActionListener(loadDoodleListener);
+		fileMenu.add(loadDoodle);
 
 		JMenuItem exitDoodle = new JMenuItem("Exit");
-        exitDoodle.addActionListener(exitDoodleListener);
-        fileMenu.add(exitDoodle);
+		exitDoodle.addActionListener(exitDoodleListener);
+		fileMenu.add(exitDoodle);
 	}
 }

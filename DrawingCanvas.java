@@ -8,86 +8,58 @@ public class DrawingCanvas extends JPanel implements ViewInterface {
 	private Model m_model;
 	private boolean m_fullView;
 
-   	public DrawingCanvas(Model model, boolean fullView) {
-//		setMaximumSize(new Dimension(400, 400));
+	public DrawingCanvas(Model model, boolean fullView) {
 		setBorder(BorderFactory.createLineBorder(Color.black, 5));
 		setBackground(Color.WHITE);
-        m_model = model;
-        addMouseListener(new MouseAdapter() {
-           	@Override
-           	public void mousePressed(MouseEvent e) {
+		m_model = model;
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
 				float x = (float)e.getX()*Model.CANVAS_WIDTH/getWidth();
 				float y = (float)e.getY()*Model.CANVAS_HEIGHT/getHeight();
-				//Model.Point point =  m_model.new Point(x, y, System.currentTimeMillis());
-               	m_model.newStroke(x, y, System.currentTimeMillis());
-//               	repaint();
-//				System.out.println(getWidth() + "   " + getHeight());
-           	}
+				m_model.newStroke(x, y, System.currentTimeMillis());
+			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				m_model.strokeFinished(System.currentTimeMillis());
 			}
-        });
+		});
 
-       	addMouseMotionListener(new MouseMotionAdapter() {
-           	@Override
-           	public void mouseDragged(MouseEvent e) {
+		addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
 				float x = (float)e.getX()*Model.CANVAS_WIDTH/getWidth();
-                float y = (float)e.getY()*Model.CANVAS_HEIGHT/getHeight();
-                //Model.Point point =  m_model.new Point(x, y, System.currentTimeMillis());
-               	m_model.extendStroke(x, y, System.currentTimeMillis());
-  //             	repaint();
-           	}
-       	});
-    }
-
-	@Override
-    public Dimension getPreferredSize() {
-    	return new Dimension(Model.CANVAS_WIDTH, Model.CANVAS_HEIGHT);
-    }
-
-    @Override
-    public Dimension getMaximumSize() {
-        return new Dimension(Model.CANVAS_WIDTH, Model.CANVAS_HEIGHT);
-    }
-
-
-	@Override
-	public void notifyView() {
-		//System.out.println("Repainting canvas aaaaaa");
-		repaint();
-		revalidate();
+				float y = (float)e.getY()*Model.CANVAS_HEIGHT/getHeight();
+				m_model.extendStroke(x, y, System.currentTimeMillis());
+			}
+		});
 	}
 
-/*	@Override
+	@Override
 	public Dimension getPreferredSize() {
-//		if (m_model.getFullSize()) {
-			return new Dimension(m_model.CANVAS_WIDTH, m_model.CANVAS_HEIGHT);
-	//	} else {
-	//		return super.getPreferredSize();
-	//	}
-		//return new Dimension(10000, 10000);
+		return new Dimension(Model.CANVAS_WIDTH, Model.CANVAS_HEIGHT);
 	}
 
 	@Override
 	public Dimension getMaximumSize() {
-	//	if (m_model.getFullSize()) {
-			return new Dimension(m_model.CANVAS_WIDTH, m_model.CANVAS_HEIGHT);
-	//	} else {
-	//		return super.getMaximumSize();//new Dimension(getParent().getWidth(), getParent().getHeight());
-	//	}
+		return new Dimension(Model.CANVAS_WIDTH, Model.CANVAS_HEIGHT);
 	}
-*/
-	@Override    
-   	public void paintComponent(Graphics g) {
+
+
+	@Override
+	public void notifyView() {
+		repaint();
+		revalidate();
+	}
+
+	@Override	 
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-       	Graphics2D g2 = (Graphics2D) g; // cast to get 2D drawing methods
-       	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  // antialiasing look nicer
-           	    RenderingHints.VALUE_ANTIALIAS_ON);
-       	//for (Model.Stroke stroke : m_model.getStrokeList()) {
+		Graphics2D g2 = (Graphics2D) g; // cast to get 2D drawing methods
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  // antialiasing look nicer
+				RenderingHints.VALUE_ANTIALIAS_ON);
 		for (int i = 0; i < m_model.getStrokeList().size(); i++) {
-			//System.out.println("Drawing the stroke: " + i);
-           	m_model.getStrokeList().get(i).draw(g2, i);
-       	}
-  	}
+			m_model.getStrokeList().get(i).draw(g2, i);
+		}
+	}
 }

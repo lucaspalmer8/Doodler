@@ -16,10 +16,10 @@ public class Model {
 	public static int CANVAS_WIDTH = 700;
 	public static int CANVAS_HEIGHT = 400;
 
-	private Doodle doodle;
+	private Doodle m_doodle;
 
 	public Doodle getDoodle() {
-		return doodle;
+		return m_doodle;
 	}
 
 	public Model(Doodle doodler) {
@@ -27,7 +27,7 @@ public class Model {
 		m_drawingWidth = 10;
 		m_sliderNumber = 0;
 		m_fullSize = true;
-		doodle = doodler;
+		m_doodle = doodler;
 	}
 
 	public void addObserver(ViewInterface view) {
@@ -43,8 +43,8 @@ public class Model {
 	//Reset everything to the default
 	public void resetDefault() {
 		m_drawingColor = Color.BLACK;
-        m_drawingWidth = 10;
-        setFullSize(true);
+		m_drawingWidth = 10;
+		setFullSize(true);
 		m_strokeList = new ArrayList<DoodleStroke>();
 		notifyViews();
 	}
@@ -60,15 +60,15 @@ public class Model {
 		if (m_fullSize == fullSize) return;
 		m_fullSize = fullSize;
 		if (m_fullSize) {
-			doodle.panel.remove(doodle.fitView);
-			doodle.panel.add(doodle.fullView, BorderLayout.CENTER);
-			doodle.panel.validate();
-			doodle.panel.repaint();
+			m_doodle.getPanel().remove(m_doodle.getFitView());
+			m_doodle.getPanel().add(m_doodle.getFullView(), BorderLayout.CENTER);
+			m_doodle.getPanel().validate();
+			m_doodle.getPanel().repaint();
 		} else {
-			doodle.panel.remove(doodle.fullView);
-			doodle.panel.add(doodle.fitView, BorderLayout.CENTER);
-			doodle.panel.validate();
-			doodle.panel.repaint();
+			m_doodle.getPanel().remove(m_doodle.getFullView());
+			m_doodle.getPanel().add(m_doodle.getFitView(), BorderLayout.CENTER);
+			m_doodle.getPanel().validate();
+			m_doodle.getPanel().repaint();
 		}
 	}
 	
@@ -89,7 +89,7 @@ public class Model {
 	}
 
 	public JFrame getFrame() {
-		return doodle.frame;
+		return m_doodle.getFrame();
 	}
 
 	public Color getColor() {
@@ -120,7 +120,7 @@ public class Model {
 
 	public void extendStroke(float x, float y, long time) {
 		DoodleStroke current = m_strokeList.get(m_strokeList.size() - 1);
-        current.addPoint(x, y, time);
+		current.addPoint(x, y, time);
 		notifyViews();
 	}
 
@@ -129,9 +129,7 @@ public class Model {
 		m_strokeList.get(m_strokeList.size() - 1)
 				.setElapsedTime(time - m_strokeList.get(m_strokeList.size() - 1).getPointList().get(0).getTimeStamp());
 		m_sliderNumber = m_strokeList.size()*100;
-		//System.out.println("Settin the model slider number to::   " + m_sliderNumber);
 		notifyViews();
-		//System.out.println("Stroke finished");
 	}
 	
 	public int getFinishedStrokes() {

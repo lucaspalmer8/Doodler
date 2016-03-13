@@ -36,15 +36,15 @@ public class DoodleStroke implements Serializable {
 	}
 
 	 public class DoodlePoint implements Serializable {
-        private float m_x;
-        private float m_y;
-        private long m_timeStamp;
+		private float m_x;
+		private float m_y;
+		private long m_timeStamp;
 
-        public DoodlePoint(float x, float y, long time) {
-            m_x = x;
-            m_y = y;
-            m_timeStamp = time;
-        }
+		public DoodlePoint(float x, float y, long time) {
+			m_x = x;
+			m_y = y;
+			m_timeStamp = time;
+		}
 
 		float getFloatX() {
 			return m_x;
@@ -55,24 +55,24 @@ public class DoodleStroke implements Serializable {
 		}
 		
 		//Two getters for drawing
-        int getX() {
-            if (m_model.getFullSize()) {
-                return (int)m_x;
-            } else {
-                return (int)(m_x*m_model.getDoodle().fitView.getWidth()/Model.CANVAS_WIDTH);
-            }
-        }
-        int getY() {
-            if (m_model.getFullSize()) {
-                return (int)m_y;
-            } else {
-                return (int)(m_y*m_model.getDoodle().fitView.getHeight()/Model.CANVAS_HEIGHT);
-            }
-        }
-        long getTimeStamp() {
-            return m_timeStamp;
-        }
-    }
+		int getX() {
+			if (m_model.getFullSize()) {
+				return (int)m_x;
+			} else {
+				return (int)(m_x*m_model.getDoodle().getFitView().getWidth()/Model.CANVAS_WIDTH);
+			}
+		}
+		int getY() {
+			if (m_model.getFullSize()) {
+				return (int)m_y;
+			} else {
+				return (int)(m_y*m_model.getDoodle().getFitView().getHeight()/Model.CANVAS_HEIGHT);
+			}
+		}
+		long getTimeStamp() {
+			return m_timeStamp;
+		}
+	}
 
 
 	public void setModel(Model model) {
@@ -111,13 +111,10 @@ public class DoodleStroke implements Serializable {
 		DoodlePoint last = m_pointList.get(m_pointList.size() - 1);
 		DoodlePoint first = m_pointList.get(0);
 		float totalTime = last.getTimeStamp() - first.getTimeStamp();
-//			System.out.println(":::::::total time::::::::::  " + totalTime);
 		float sliderRatio = (m_model.getSliderNumber() % 100)/100f;
 		boolean drawEntireStroke = index <= m_model.getSliderNumber()/100 - 1;
-//			System.out.println("::::::::::::::::::::::  " + ratio);
 		for (int i = 0; i < m_pointList.size(); i++) {
 			DoodlePoint point = m_pointList.get(i);
-			//if (totalTime == 0) {int k = 100/0;}
 			float drawingRatio;
 			if (totalTime == 0) {
 				drawingRatio = 0;
@@ -125,11 +122,9 @@ public class DoodleStroke implements Serializable {
 				drawingRatio = (point.getTimeStamp() - first.getTimeStamp())/totalTime;
 			}
 			if (!drawEntireStroke && isFinished() && drawingRatio >= sliderRatio) break;
-			//System.out.println("draw strok:  " + drawEntireStroke + "  isFinished::  " + isFinished() + "  drawing Ratio:   " +drawingRatio+ "   slider ratio:   " + sliderRatio);
-			//System.out.println(":::::::::::::::::::::::::   " + drawingRatio);
 			g2.setStroke(new BasicStroke(m_width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 			g2.setColor(m_color);
-			if (i == 0) {//m_pointList.size() - 1) {
+			if (i == 0) {
 				g2.drawLine(m_pointList.get(i).getX(), m_pointList.get(i).getY(),
 						m_pointList.get(i).getX(), m_pointList.get(i).getY());
 				continue;
